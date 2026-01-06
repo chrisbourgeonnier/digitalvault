@@ -1,0 +1,12 @@
+<h1><%= @product.title %></h1>
+<p><%= @product.description %></p>
+<p><strong>Price:</strong> $<%= @product.price %></p>
+<p><strong>File:</strong> <%= @product.file %></p>
+<p><strong>Seller:</strong> <%= @product.user.email %></p>
+
+<% if current_user == @product.user %>
+  <%= link_to 'Edit', edit_product_path(@product) %>
+  <%= button_to 'Delete', @product, method: :delete %>
+<% end %>
+
+<%= link_to 'Back', products_path %>
