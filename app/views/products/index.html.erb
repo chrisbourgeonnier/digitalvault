@@ -1,26 +1,28 @@
-<h1>Products</h1>
+<div class="products-index">
+  <h1>Products</h1>
 
-<% if @products.any? %>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Title</th>
-        <th>Price</th>
-        <th>Seller</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @products.each do |product| %>
+  <% if @products.any? %>
+    <table class="table">
+      <thead>
         <tr>
-          <td><%= link_to product.title, product %></td>
-          <td>$<%= product.price %></td>
-          <td><%= product.user.email %></td>
+          <th>Title</th>
+          <th>Price</th>
+          <th>Seller</th>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
-<% else %>
-  <p>No products yet.</p>
-<% end %>
+      </thead>
+      <tbody>
+        <% @products.each do |product| %>
+          <tr>
+            <td><%= link_to product.title, product %></td>
+            <td>$<%= product.price %></td>
+            <td><%= product.user.email %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p>No products yet.</p>
+  <% end %>
 
-<%= link_to 'New Product', new_product_path %>
+  <%= link_to 'New Product', new_product_path %>
+</div>
