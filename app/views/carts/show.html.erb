@@ -32,8 +32,11 @@
       <strong>Total: $<%= '%.2f' % total %></strong>
     </div>
 
-    <%= link_to 'Clear Cart', clear_cart_path %>
-    <%= link_to 'Continue Shopping', products_path %>
+    <div class="cart-actions">
+      <%= button_to "Proceed to Checkout", checkout_path, method: :post, class: "btn-primary", data: { turbo: false } %>
+      <%= link_to "Clear Cart", clear_cart_path, class: "btn-secondary" %>
+      <%= link_to "Continue Shopping", products_path, class: "text-gray-600" %>
+    </div>
   <% else %>
     <p>Your cart is empty.</p>
     <%= link_to 'Browse Products', products_path %>
