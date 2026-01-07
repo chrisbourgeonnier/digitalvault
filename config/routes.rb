@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "webhooks/stripe"
   post "/checkout", to: "checkout#create", as: :checkout
   get "/checkout/success", to: "checkout#success", as: :checkout_success
   get "/checkout/cancel", to: "checkout#cancel", as: :checkout_cancel
@@ -13,6 +14,9 @@ Rails.application.routes.draw do
   get "products/edit"
   get "products/update"
   get "products/destroy"
+  # Stripe webhook endpoint - must be POST and outside CSRF protection
+  post "webhooks/stripe", to: "webhooks#stripe"
+
   devise_for :users
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
