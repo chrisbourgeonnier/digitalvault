@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
-  get "carts/show"
-  get "carts/add_item"
-  get "carts/remove_item"
-  get "carts/clear"
+  get "/cart", to: "carts#show", as: :cart
+  post "/cart/:product_id/add", to: "carts#add_item", as: :add_item_to_cart
+  delete "/cart/:product_id", to: "carts#remove_item", as: :remove_item_from_cart
+  get "/cart/clear", to: "carts#clear", as: :clear_cart
   get "products/index"
   get "products/show"
   get "products/new"
@@ -24,11 +24,4 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
   resources :products
-
-  resources :carts, only: [ :show ] do
-    member do
-      post :add_item
-      delete :remove_item
-    end
-  end
 end

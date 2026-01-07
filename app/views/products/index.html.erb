@@ -16,6 +16,7 @@
             <td><%= link_to product.title, product %></td>
             <td>$<%= product.price %></td>
             <td><%= product.user.email %></td>
+            <td><%= button_to 'Add to Cart', add_item_to_cart_path(product.id), method: :post, class: 'btn-sm' %></td>
           </tr>
         <% end %>
       </tbody>

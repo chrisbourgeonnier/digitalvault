@@ -5,9 +5,12 @@
 <p><strong>File:</strong> <%= @product.file %></p>
 <p><strong>Seller:</strong> <%= @product.user.email %></p>
 
+<%= button_to 'Add to Cart', add_item_to_cart_path(@product.id), method: :post, class: "btn-add-cart" %>
+
 <% if current_user == @product.user %>
   <%= link_to 'Edit', edit_product_path(@product) %>
   <%= button_to 'Delete', @product, method: :delete %>
 <% end %>
+
 
 <%= link_to 'Back', products_path %>

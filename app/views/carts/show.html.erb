@@ -1,4 +1,41 @@
-<div>
-  <h1 class="font-bold text-4xl">Carts#show</h1>
-  <p>Find me in app/views/carts/show.html.erb</p>
+<div class="cart-container">
+  <h1>Your Cart</h1>
+
+  <% if @line_items.any? %>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Price</th>
+          <th>Quantity</th>
+          <th>Subtotal</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% total = 0 %>
+        <% @line_items.each do |item| %>
+          <% subtotal = item[:product].price * item[:quantity] %>
+          <% total += subtotal %>
+          <tr>
+            <td><%= link_to item[:product].title, item[:product] %></td>
+            <td>$<%= item[:product].price %></td>
+            <td><%= item[:quantity] %></td>
+            <td>$<%= '%.2f' % subtotal %></td>
+            <td><%= button_to 'Remove', remove_item_from_cart_path(item[:product].id), method: :delete %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <div class="cart-total">
+      <strong>Total: $<%= '%.2f' % total %></strong>
+    </div>
+
+    <%= link_to 'Clear Cart', clear_cart_path %>
+    <%= link_to 'Continue Shopping', products_path %>
+  <% else %>
+    <p>Your cart is empty.</p>
+    <%= link_to 'Browse Products', products_path %>
+  <% end %>
 </div>
