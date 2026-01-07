@@ -41,6 +41,14 @@ A secure, minimalist marketplace for digital downloads (PDFs, templates, etc.) b
 - Nav bar with cart count badge
 - Quick "Add to Cart" from product listing and detail pages
 
+### Step 4 (Next): Stripe Checkout
+
+- Stripe API keys setup
+- Create checkout session from cart
+- Order model for purchase history
+- Secure download links post-payment
+
+
 ## Setup Instructions
 
 ### Prerequisites
@@ -118,13 +126,6 @@ Edit `config/database.yml` for local PostgreSQL credentials (development env use
 
 
 ## Roadmap
-
-### Step 4 (Next): Stripe Checkout
-
-- Stripe API keys setup
-- Create checkout session from cart
-- Order model for purchase history
-- Secure download links post-payment
 
 
 ### Step 5: Security \& Deploy

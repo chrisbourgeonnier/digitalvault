@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  post "/checkout", to: "checkout#create", as: :checkout
+  get "/checkout/success", to: "checkout#success", as: :checkout_success
+  get "/checkout/cancel", to: "checkout#cancel", as: :checkout_cancel
   get "/cart", to: "carts#show", as: :cart
   post "/cart/:product_id/add", to: "carts#add_item", as: :add_item_to_cart
   delete "/cart/:product_id", to: "carts#remove_item", as: :remove_item_from_cart

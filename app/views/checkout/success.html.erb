@@ -1,0 +1,16 @@
+<div class="success-container">
+  <h1>Payment Successful!</h1>
+
+  <% if @order %>
+    <div class="order-summary">
+      <p>Thank you for your purchase!</p>
+      <p><strong>Order Total:</strong> $<%= "%.2f" % @order.total %></p>
+      <p><strong>Order ID:</strong> <%= @order.id %></p>
+      <p class="text-gray-600">Status: <%= @order.status.capitalize %></p>
+
+      <p class="mt-4">Your digital downloads will be available shortly.</p>
+    </div>
+
+    <%= link_to "Back to Products", products_path, class: "btn-primary" %>
+  <% end %>
+</div>
