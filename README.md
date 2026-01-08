@@ -41,7 +41,7 @@ A secure, minimalist marketplace for digital downloads (PDFs, templates, etc.) b
 - Nav bar with cart count badge
 - Quick "Add to Cart" from product listing and detail pages
 
-### Step 4 (Next): Stripe Checkout
+### Step 4: Stripe Checkout
 
 - Stripe API keys setup
 - Create checkout session from cart
