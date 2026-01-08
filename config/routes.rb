@@ -1,34 +1,30 @@
 Rails.application.routes.draw do
-  get "webhooks/stripe"
-  post "/checkout", to: "checkout#create", as: :checkout
-  get "/checkout/success", to: "checkout#success", as: :checkout_success
-  get "/checkout/cancel", to: "checkout#cancel", as: :checkout_cancel
+  # Devise authentication
+  devise_for :users
+
+  # Products (RESTful routes: index, show, new, create, edit, update, destroy)
+  resources :products
+
+  # Cart routes
   get "/cart", to: "carts#show", as: :cart
   post "/cart/:product_id/add", to: "carts#add_item", as: :add_item_to_cart
   delete "/cart/:product_id", to: "carts#remove_item", as: :remove_item_from_cart
   get "/cart/clear", to: "carts#clear", as: :clear_cart
-  get "products/index"
-  get "products/show"
-  get "products/new"
-  get "products/create"
-  get "products/edit"
-  get "products/update"
-  get "products/destroy"
-  # Stripe webhook endpoint - must be POST and outside CSRF protection
-  post "webhooks/stripe", to: "webhooks#stripe"
 
-  devise_for :users
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  # Checkout routes
+  post "/checkout", to: "checkout#create", as: :checkout
+  get "/checkout/success", to: "checkout#success", as: :checkout_success
+  get "/checkout/cancel", to: "checkout#cancel", as: :checkout_cancel
 
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
+  # Secure download route
+  get "/downloads/:id", to: "downloads#show", as: :download
+
+  # Stripe webhook endpoint (POST only, CSRF protection skipped in controller)
+  post "/webhooks/stripe", to: "webhooks#stripe"
+
+  # Health check for load balancers
   get "up" => "rails/health#show", as: :rails_health_check
 
-  # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
-  # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
-  # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
-
-  # Defines the root path route ("/")
-  # root "posts#index"
-  resources :products
+  # Root path (optional - uncomment and set your root)
+  # root "products#index"
 end
