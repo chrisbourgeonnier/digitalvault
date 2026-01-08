@@ -1,15 +1,39 @@
-<%= form_with(model: @product) do |form| %>
-  <%= form.label :title %>
-  <%= form.text_field :title %>
+<%= form_with(model: product, local: true) do |form| %>
+  <% if product.errors.any? %>
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+      <h2 class="font-bold"><%= pluralize(product.errors.count, "error") %> prohibited this product from being saved:</h2>
+      <ul class="list-disc list-inside">
+        <% product.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
 
-  <%= form.label :description %>
-  <%= form.text_area :description %>
+  <div class="mb-4">
+    <%= form.label :title, class: "block text-gray-700 font-bold mb-2" %>
+    <%= form.text_field :title, class: "w-full px-3 py-2 border rounded" %>
+  </div>
 
-  <%= form.label :price %>
-  <%= form.number_field :price, step: 0.01 %>
+  <div class="mb-4">
+    <%= form.label :description, class: "block text-gray-700 font-bold mb-2" %>
+    <%= form.text_area :description, rows: 4, class: "w-full px-3 py-2 border rounded" %>
+  </div>
 
-  <%= form.label :file %>
-  <%= form.text_field :file %>
+  <div class="mb-4">
+    <%= form.label :price, class: "block text-gray-700 font-bold mb-2" %>
+    <%= form.number_field :price, step: 0.01, class: "w-full px-3 py-2 border rounded" %>
+  </div>
 
-  <%= form.submit %>
+  <div class="mb-4">
+    <%= form.label :digital_file, "Upload Digital File", class: "block text-gray-700 font-bold mb-2" %>
+    <%= form.file_field :digital_file, class: "w-full px-3 py-2 border rounded", accept: ".pdf,.png,.jpg,.jpeg,.zip,.doc,.docx" %>
+    <% if product.digital_file.attached? %>
+      <p class="text-sm text-gray-600 mt-2">Current file: <%= product.digital_file.filename %></p>
+    <% end %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit class: "bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 cursor-pointer" %>
+  </div>
 <% end %>

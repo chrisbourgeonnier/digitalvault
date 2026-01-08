@@ -1,16 +1,40 @@
-<h1><%= @product.title %></h1>
+<div class="container mx-auto p-6">
+  <% if notice %>
+    <p class="notice bg-green-100 text-green-800 p-4 rounded mb-4"><%= notice %></p>
+  <% end %>
 
-<p><%= @product.description %></p>
-<p><strong>Price:</strong> $<%= @product.price %></p>
-<p><strong>File:</strong> <%= @product.file %></p>
-<p><strong>Seller:</strong> <%= @product.user.email %></p>
+  <h1 class="text-3xl font-bold mb-4"><%= @product.title %></h1>
 
-<%= button_to 'Add to Cart', add_item_to_cart_path(@product.id), method: :post, class: "btn-add-cart" %>
+  <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+    <p class="text-gray-700 mb-4"><%= @product.description %></p>
 
-<% if current_user == @product.user %>
-  <%= link_to 'Edit', edit_product_path(@product) %>
-  <%= button_to 'Delete', @product, method: :delete %>
-<% end %>
+    <p class="text-2xl font-bold text-green-600 mb-4">
+      <strong>Price:</strong> $<%= sprintf("%.2f", @product.price) %>
+    </p>
 
+    <% if @product.digital_file.attached? %>
+      <p class="mb-4">
+        <strong>File:</strong>
+        <span class="text-blue-600"><%= @product.digital_file.filename %></span>
+        <span class="text-gray-500 text-sm">(<%= number_to_human_size(@product.digital_file.byte_size) %>)</span>
+      </p>
+    <% else %>
+      <p class="text-red-500 mb-4"><strong>File:</strong> No file attached</p>
+    <% end %>
 
-<%= link_to 'Back', products_path %>
+    <p class="text-gray-600">
+      <strong>Seller:</strong> <%= @product.user.email %>
+    </p>
+  </div>
+
+  <% if user_signed_in? && current_user == @product.user %>
+    <%= link_to "Edit", edit_product_path(@product), class: "bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mr-2" %>
+    <%= button_to "Delete", @product, method: :delete, class: "bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600", data: { confirm: "Are you sure?" } %>
+  <% else %>
+    <%= button_to "Add to Cart", add_item_to_cart_path(@product.id), method: :post, class: "bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 text-lg" %>
+  <% end %>
+
+  <div class="mt-4">
+    <%= link_to "Back", products_path, class: "text-blue-500 hover:text-blue-700" %>
+  </div>
+</div>
