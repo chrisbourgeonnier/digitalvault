@@ -4,6 +4,9 @@ Rails.application.routes.draw do
 
   # Products (RESTful routes: index, show, new, create, edit, update, destroy)
   resources :products
+  # Orders (view only)
+  resources :orders, only: [ :index, :show ]
+
 
   # Cart routes
   get "/cart", to: "carts#show", as: :cart
