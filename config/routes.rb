@@ -29,5 +29,5 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   # Root path (optional - uncomment and set your root)
-  # root "products#index"
+  root "products#index"
 end
