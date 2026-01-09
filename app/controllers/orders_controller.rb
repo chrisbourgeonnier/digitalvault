@@ -1,15 +1,20 @@
 class OrdersController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_order, only: [ :show ]
+  after_action :verify_authorized, except: [ :index ]
+  after_action :verify_policy_scoped, only: [ :index ]
 
   def index
-    # Show only current user's orders, newest first
-    @orders = current_user.orders.order(created_at: :desc)
+    @orders = policy_scope(Order).order(created_at: :desc)
   end
 
   def show
-    # Find order belonging to current user
-    @order = current_user.orders.find(params[:id])
-  rescue ActiveRecord::RecordNotFound
-    redirect_to orders_path, alert: "Order not found."
+    authorize @order
+  end
+
+  private
+
+  def set_order
+    @order = Order.find(params[:id])
   end
 end
