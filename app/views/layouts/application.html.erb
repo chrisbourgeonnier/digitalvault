@@ -26,23 +26,27 @@
     <nav class="bg-gray-800 text-white p-4">
       <div class="container mx-auto flex justify-between items-center">
         <div class="flex space-x-4">
-          <%= link_to 'DigitalVault', products_path, class: 'font-bold text-xl' %>
-          <%= link_to 'Products', products_path, class: 'hover:text-gray-300' %>
+          <%= link_to "DigitalVault", products_path, class: "font-bold text-xl" %>
+          <%= link_to "Products", products_path, class: "hover:text-gray-300" %>
+          <% if user_signed_in? %>
+            <%= link_to "My Orders", orders_path, class: "hover:text-gray-300" %>
+          <% end %>
         </div>
 
         <div class="flex space-x-4 items-center">
-          <%= link_to "Cart (#{cart_item_count})", cart_path, class: 'hover:text-gray-300' %>
+          <%= link_to "Cart (#{cart_item_count})", cart_path, class: "hover:text-gray-300" %>
 
           <% if user_signed_in? %>
             <span class="text-sm"><%= current_user.email %></span>
-            <%= button_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'hover:text-gray-300' %>
+            <%= button_to "Sign Out", destroy_user_session_path, method: :delete, class: "hover:text-gray-300" %>
           <% else %>
-            <%= link_to 'Sign In', new_user_session_path, class: 'hover:text-gray-300' %>
-            <%= link_to 'Sign Up', new_user_registration_path, class: 'hover:text-gray-300' %>
+            <%= link_to "Sign In", new_user_session_path, class: "hover:text-gray-300" %>
+            <%= link_to "Sign Up", new_user_registration_path, class: "hover:text-gray-300" %>
           <% end %>
         </div>
       </div>
     </nav>
+
 
     <% if notice %>
       <p class="notice bg-green-100 text-green-800 p-4"><%= notice %></p>

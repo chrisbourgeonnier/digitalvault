@@ -1,0 +1,42 @@
+<div class="container mx-auto p-6">
+  <h1 class="text-3xl font-bold mb-6">My Orders</h1>
+
+  <% if @orders.any? %>
+    <div class="space-y-4">
+      <% @orders.each do |order| %>
+        <div class="bg-white shadow-md rounded-lg p-6 border-l-4 <%= order.status == 'paid' ? 'border-green-500' : 'border-yellow-500' %>">
+          <div class="flex justify-between items-start">
+            <div class="flex-1">
+              <h2 class="text-xl font-bold mb-2">
+                Order #<%= order.id %>
+              </h2>
+
+              <div class="text-gray-600 space-y-1">
+                <p><strong>Date:</strong> <%= order.created_at.strftime("%B %d, %Y at %I:%M %p") %></p>
+                <p><strong>Total:</strong> $<%= sprintf("%.2f", order.total) %></p>
+                <p>
+                  <strong>Status:</strong>
+                  <span class="px-2 py-1 rounded text-sm font-semibold <%= order.status == 'paid' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' %>">
+                    <%= order.status.capitalize %>
+                  </span>
+                </p>
+                <p class="text-sm text-gray-500">
+                  <%= pluralize(order.cart_data.keys.count, "item") %>
+                </p>
+              </div>
+            </div>
+
+            <div class="ml-4">
+              <%= link_to "View Details", order_path(order), class: "bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="bg-gray-100 border border-gray-300 rounded-lg p-8 text-center">
+      <p class="text-gray-600 text-lg mb-4">You haven't placed any orders yet.</p>
+      <%= link_to "Browse Products", products_path, class: "bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 inline-block" %>
+    </div>
+  <% end %>
+</div>
