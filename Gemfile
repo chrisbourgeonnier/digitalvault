@@ -45,7 +45,7 @@ gem "devise"                      # Secure user authentication (encrypted passwo
 gem "pundit"                      # Role-based authorization policies
 gem "stripe"                      # Payment processing for checkouts
 gem "hotwire-rails"               # Enables Turbo/Stimulus (already partially there via turbo/stimulus-rails)
-gem "tailwindcss-rails", "~> 2.1" # Tailwind CSS framework integration
+gem "tailwindcss-rails", "~> 4.4" # Tailwind CSS framework integration
 gem "rack-attack"                 # Throttle and block abusive requests
 
 
