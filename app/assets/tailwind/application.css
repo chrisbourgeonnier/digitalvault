@@ -1,0 +1,117 @@
+@import "tailwindcss";
+
+/* Base element styles */
+@layer base {
+  h1 {
+    font-size: 1.875rem;
+    font-weight: 700;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    word-break: normal;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 28rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1.5rem;
+    background-color: white;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+    border-radius: 0.5rem;
+  }
+
+  label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: rgb(55 65 81);
+    margin-bottom: 0.25rem;
+  }
+
+  input, textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid rgb(209 213 219);
+    border-radius: 0.375rem;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  }
+
+  input:focus, textarea:focus {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    ring: 2px solid rgb(59 130 246);
+  }
+}
+
+/* Component styles */
+@layer components {
+  .products-index {
+    max-width: 56rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .products-index h1 {
+    font-size: 1.875rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+  }
+
+  .products-index table {
+    width: 100%;
+    background-color: white;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+
+  .products-index th {
+    background-color: rgb(249 250 251);
+    padding: 0.75rem 1.5rem;
+    text-align: left;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: rgb(107 114 128);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .products-index td {
+    padding: 1rem 1.5rem;
+    white-space: nowrap;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: rgb(17 24 39);
+  }
+
+  .products-index .btn-new {
+    display: inline-block;
+    background-color: rgb(79 70 229);
+    color: white;
+    padding: 0.75rem 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  }
+
+  .products-index .btn-new:hover {
+    background-color: rgb(67 56 202);
+  }
+
+  .btn-add-cart {
+    background-color: rgb(22 163 74);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+  }
+
+  .btn-add-cart:hover {
+    background-color: rgb(21 128 61);
+  }
+}
