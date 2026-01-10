@@ -38,7 +38,7 @@
 
           <% if user_signed_in? %>
             <span class="text-sm"><%= current_user.email %></span>
-            <%= button_to "Sign Out", destroy_user_session_path, method: :delete, class: "hover:text-gray-300" %>
+            <%= button_to "Sign Out", destroy_user_session_path, method: :delete, form_class:"inline-form", class: "hover:text-gray-300" %>
           <% else %>
             <%= link_to "Sign In", new_user_session_path, class: "hover:text-gray-300" %>
             <%= link_to "Sign Up", new_user_registration_path, class: "hover:text-gray-300" %>
