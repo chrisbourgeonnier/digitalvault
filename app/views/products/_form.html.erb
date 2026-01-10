@@ -1,6 +1,6 @@
-<%= form_with(model: product, local: true) do |form| %>
+<%= form_with(model: product, class: "space-y-4") do |form| %>
   <% if product.errors.any? %>
-    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+    <div class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded">
       <h2 class="font-bold"><%= pluralize(product.errors.count, "error") %> prohibited this product from being saved:</h2>
       <ul class="list-disc list-inside">
         <% product.errors.full_messages.each do |message| %>
@@ -10,30 +10,47 @@
     </div>
   <% end %>
 
-  <div class="mb-4">
-    <%= form.label :title, class: "block text-gray-700 font-bold mb-2" %>
-    <%= form.text_field :title, class: "w-full px-3 py-2 border rounded" %>
+  <div>
+    <%= form.label :title, class: "block font-semibold mb-1" %>
+    <%= form.text_field :title, class: "input w-full" %>
   </div>
 
-  <div class="mb-4">
-    <%= form.label :description, class: "block text-gray-700 font-bold mb-2" %>
-    <%= form.text_area :description, rows: 4, class: "w-full px-3 py-2 border rounded" %>
+  <div>
+    <%= form.label :description, class: "block font-semibold mb-1" %>
+    <%= form.text_area :description, rows: 4, class: "input w-full" %>
   </div>
 
-  <div class="mb-4">
-    <%= form.label :price, class: "block text-gray-700 font-bold mb-2" %>
-    <%= form.number_field :price, step: 0.01, class: "w-full px-3 py-2 border rounded" %>
+  <div>
+    <%= form.label :price, class: "block font-semibold mb-1" %>
+    <%= form.number_field :price, step: 0.01, class: "input w-full" %>
   </div>
 
-  <div class="mb-4">
-    <%= form.label :digital_file, "Upload Digital File", class: "block text-gray-700 font-bold mb-2" %>
-    <%= form.file_field :digital_file, class: "w-full px-3 py-2 border rounded", accept: ".pdf,.png,.jpg,.jpeg,.zip,.doc,.docx" %>
-    <% if product.digital_file.attached? %>
-      <p class="text-sm text-gray-600 mt-2">Current file: <%= product.digital_file.filename %></p>
+  <!-- NEW: Product Image Upload -->
+  <div>
+    <%= form.label :image, "Product Image (optional)", class: "block font-semibold mb-1" %>
+    <%= form.file_field :image, accept: "image/png,image/jpeg,image/jpg,image/gif,image/webp", class: "block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" %>
+    <p class="text-sm text-gray-500 mt-1">PNG, JPG, GIF, or WebP - Max 5MB</p>
+
+    <% if product.image.attached? %>
+      <div class="mt-2">
+        <p class="text-sm text-gray-600">Current image:</p>
+        <%= image_tag product.image, class: "mt-1 w-32 h-32 object-cover rounded border" %>
+      </div>
     <% end %>
   </div>
 
-  <div class="actions">
-    <%= form.submit class: "bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 cursor-pointer" %>
+  <div>
+    <%= form.label :digital_file, "Digital File", class: "block font-semibold mb-1" %>
+    <%= form.file_field :digital_file, accept: ".pdf,.png,.jpg,.jpeg,.zip,.doc,.docx", class: "block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" %>
+    <p class="text-sm text-gray-500 mt-1">PDF, Image, ZIP, or DOC file</p>
+
+    <% if product.digital_file.attached? %>
+      <p class="text-sm text-green-600 mt-1">✓ File attached: <%= product.digital_file.filename %></p>
+    <% end %>
+  </div>
+
+  <div class="flex gap-2">
+    <%= form.submit class: "btn btn-primary" %>
+    <%= link_to "Cancel", products_path, class: "btn btn-secondary" %>
   </div>
 <% end %>
