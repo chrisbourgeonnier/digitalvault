@@ -89,6 +89,13 @@
     <% end %>
   </div>
 
+  <!-- Pagination Navigation -->
+  <% if @products.any? %>
+    <div class="mt-8">
+      <%== pagy_nav(@pagy) %>
+    </div>
+  <% end %>
+
   <% if @products.empty? %>
     <div class="text-center py-12">
       <% if params[:search].present? || params[:min_price].present? || params[:max_price].present? %>
