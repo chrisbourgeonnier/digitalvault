@@ -4,13 +4,14 @@ class ProductsController < ApplicationController
   after_action :verify_authorized, except: [ :index ]
 
   def index
-    @products = Product.all
-                      .search_by_keyword(params[:search])
-                      .min_price(params[:min_price])
-                      .max_price(params[:max_price])
-                      .sorted_by(params[:sort])
-  end
+    products_scope = Product.all
+                            .search_by_keyword(params[:search])
+                            .min_price(params[:min_price])
+                            .max_price(params[:max_price])
+                            .sorted_by(params[:sort])
 
+    @pagy, @products = pagy(products_scope)
+  end
 
   def show
     authorize @product

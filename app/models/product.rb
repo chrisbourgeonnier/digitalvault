@@ -31,7 +31,7 @@ class Product < ApplicationRecord
   }
 
   scope :sorted_by, ->(sort_option) {
-    case sort_option
+    case sort_option.to_s
     when "oldest"
       order(created_at: :asc)
     when "price_asc"
