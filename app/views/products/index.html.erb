@@ -6,6 +6,58 @@
     <% end %>
   </div>
 
+  <!-- Search and Filter Form -->
+  <div class="mb-8">
+    <%= form_with url: products_path, method: :get, local: true, class: "bg-white shadow-md rounded-lg p-6" do |f| %>
+      <div class="grid md:grid-cols-3 gap-4">
+        <!-- Search by keyword -->
+        <div>
+          <%= f.label :search, "Search", class: "block font-semibold mb-2" %>
+          <%= f.text_field :search, value: params[:search], placeholder: "Search by title or description...", class: "input w-full" %>
+        </div>
+
+        <!-- Price range -->
+        <div>
+          <%= f.label :min_price, "Min Price", class: "block font-semibold mb-2" %>
+          <%= f.number_field :min_price, value: params[:min_price], step: 0.01, min: 0, placeholder: "0.00", class: "input w-full" %>
+        </div>
+
+        <div>
+          <%= f.label :max_price, "Max Price", class: "block font-semibold mb-2" %>
+          <%= f.number_field :max_price, value: params[:max_price], step: 0.01, min: 0, placeholder: "Any", class: "input w-full" %>
+        </div>
+      </div>
+
+      <!-- Sort options -->
+      <div class="mt-4 flex gap-4 items-end">
+        <div class="flex-1">
+          <%= f.label :sort, "Sort By", class: "block font-semibold mb-2" %>
+          <%= f.select :sort,
+              options_for_select([
+                ["Newest First", "newest"],
+                ["Oldest First", "oldest"],
+                ["Price: Low to High", "price_asc"],
+                ["Price: High to Low", "price_desc"]
+              ], params[:sort]),
+              {},
+              class: "input w-full" %>
+        </div>
+
+        <div class="flex gap-2">
+          <%= f.submit "Apply Filters", class: "btn btn-primary" %>
+          <%= link_to "Clear", products_path, class: "btn btn-secondary" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Results count -->
+  <% if params[:search].present? || params[:min_price].present? || params[:max_price].present? %>
+    <div class="mb-4 text-gray-600">
+      Found <%= pluralize(@products.count, "product") %>
+    </div>
+  <% end %>
+
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     <% @products.each do |product| %>
       <div class="card hover:shadow-lg transition">
@@ -39,9 +91,14 @@
 
   <% if @products.empty? %>
     <div class="text-center py-12">
-      <p class="text-gray-500 text-lg">No products available yet.</p>
-      <% if user_signed_in? %>
-        <%= link_to "Create the first product", new_product_path, class: "btn btn-primary mt-4" %>
+      <% if params[:search].present? || params[:min_price].present? || params[:max_price].present? %>
+        <p class="text-gray-500 text-lg">No products match your search criteria.</p>
+        <%= link_to "Clear filters", products_path, class: "btn btn-primary mt-4" %>
+      <% else %>
+        <p class="text-gray-500 text-lg">No products available yet.</p>
+        <% if user_signed_in? %>
+          <%= link_to "Create the first product", new_product_path, class: "btn btn-primary mt-4" %>
+        <% end %>
       <% end %>
     </div>
   <% end %>

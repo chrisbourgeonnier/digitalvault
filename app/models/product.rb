@@ -17,6 +17,32 @@ class Product < ApplicationRecord
   # Validate image type and size
   validate :acceptable_image
 
+  # Scopes for filtering and searching
+  scope :search_by_keyword, ->(keyword) {
+    where("title ILIKE ? OR description ILIKE ?", "%#{keyword}%", "%#{keyword}%") if keyword.present?
+  }
+
+  scope :min_price, ->(price) {
+    where("price >= ?", price.to_f) if price.present?
+  }
+
+  scope :max_price, ->(price) {
+    where("price <= ?", price.to_f) if price.present?
+  }
+
+  scope :sorted_by, ->(sort_option) {
+    case sort_option
+    when "oldest"
+      order(created_at: :asc)
+    when "price_asc"
+      order(price: :asc)
+    when "price_desc"
+      order(price: :desc)
+    else # "newest" or default
+      order(created_at: :desc)
+    end
+  }
+
   private
 
   def acceptable_digital_file_type
