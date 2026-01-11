@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  # Email preview in development
+  mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
+
   # Devise authentication
   devise_for :users
 

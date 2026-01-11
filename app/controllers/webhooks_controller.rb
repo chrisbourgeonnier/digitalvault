@@ -40,6 +40,10 @@ class WebhooksController < ApplicationController
     if order
       order.update(status: "paid")
       Rails.logger.info "Order #{order.id} marked as paid"
+
+      # Send order receipt email
+      OrderMailer.with(order: order).receipt.deliver_later
+      Rails.logger.info "Order receipt email queued for order #{order.id}"
     else
       Rails.logger.error "Order not found for session #{session['id']}"
     end

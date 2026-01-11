@@ -1,0 +1,39 @@
+DigitalVault - Order Confirmation
+=====================================
+
+Thank you for your purchase!
+
+Hi <%= @user.email %>,
+
+Your payment has been successfully processed. You can download your files using the links below.
+
+ORDER DETAILS
+-------------
+Order #<%= @order.id %>
+Order Date: <%= @order.created_at.strftime("%B %d, %Y at %I:%M %p") %>
+Status: Paid
+
+YOUR PRODUCTS
+-------------
+<% @products.each do |product| %>
+
+<%= product.title %>
+<%= product.description.truncate(150) %>
+Price: $<%= sprintf("%.2f", product.price) %>
+<% if product.digital_file.attached? %>
+Download: <%= download_url(product) %>
+<% end %>
+
+---
+<% end %>
+
+TOTAL: $<%= sprintf("%.2f", @order.total) %>
+
+You can access your downloads anytime from your order history:
+<%= orders_url %>
+
+Need help? Reply to this email.
+
+---
+This email was sent by DigitalVault
+You received this email because you made a purchase on our platform.
