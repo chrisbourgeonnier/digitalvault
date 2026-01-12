@@ -8,9 +8,11 @@ class ProductsController < ApplicationController
                             .search_by_keyword(params[:search])
                             .min_price(params[:min_price])
                             .max_price(params[:max_price])
+                            .by_category(params[:category_id])
                             .sorted_by(params[:sort])
 
     @pagy, @products = pagy(products_scope)
+    @category = Category.find_by(id: params[:category_id]) if params[:category_id].present?
   end
 
   def show
@@ -60,6 +62,6 @@ class ProductsController < ApplicationController
   end
 
   def product_params
-    params.require(:product).permit(:title, :description, :price, :digital_file, :image)
+    params.require(:product).permit(:title, :description, :price, :digital_file, :image, category_ids: [])
   end
 end

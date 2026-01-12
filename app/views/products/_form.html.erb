@@ -25,7 +25,22 @@
     <%= form.number_field :price, step: 0.01, class: "input w-full" %>
   </div>
 
-  <!-- NEW: Product Image Upload -->
+  <!-- NEW: Category Selection -->
+  <div>
+    <%= form.label :category_ids, "Categories", class: "block font-semibold mb-1" %>
+    <%= form.collection_check_boxes :category_ids, Category.ordered, :id, :name do |b| %>
+      <div class="flex items-center mb-2">
+        <%= b.check_box class: "mr-2" %>
+        <%= b.label class: "text-gray-700" do %>
+          <span class="font-medium"><%= b.object.name %></span>
+          <span class="text-sm text-gray-500 ml-1">- <%= b.object.description %></span>
+        <% end %>
+      </div>
+    <% end %>
+    <p class="text-sm text-gray-500 mt-1">Select one or more categories that fit your product</p>
+  </div>
+
+  <!-- Product Image Upload -->
   <div>
     <%= form.label :image, "Product Image (optional)", class: "block font-semibold mb-1" %>
     <%= form.file_field :image, accept: "image/png,image/jpeg,image/jpg,image/gif,image/webp", class: "block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" %>

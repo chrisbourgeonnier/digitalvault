@@ -49,6 +49,27 @@
         </div>
       </div>
     <% end %>
+
+      <!-- Category Filter -->
+      <div class="mb-6">
+        <h3 class="text-lg font-semibold mb-3">Filter by Category</h3>
+        <div class="flex flex-wrap gap-2">
+          <%= link_to "All Products", products_path(search: params[:search], min_price: params[:min_price], max_price: params[:max_price], sort: params[:sort]),
+                      class: "px-4 py-2 rounded-lg transition #{params[:category_id].blank? ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}" %>
+
+          <% Category.ordered.each do |category| %>
+            <%= link_to category.name, products_path(category_id: category.id, search: params[:search], min_price: params[:min_price], max_price: params[:max_price], sort: params[:sort]),
+                        class: "px-4 py-2 rounded-lg transition #{params[:category_id].to_i == category.id ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}" %>
+          <% end %>
+        </div>
+
+        <% if @category.present? %>
+          <p class="text-sm text-gray-600 mt-2">
+            Showing products in <strong><%= @category.name %></strong>
+          </p>
+        <% end %>
+      </div>
+
   </div>
 
   <!-- Results count -->
@@ -78,6 +99,16 @@
         <h2 class="text-xl font-semibold mb-2">
           <%= link_to product.title, product, class: "hover:text-blue-600" %>
         </h2>
+
+        <% if product.categories.any? %>
+          <div class="flex flex-wrap gap-1 mb-2">
+            <% product.categories.limit(3).each do |category| %>
+              <span class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded">
+                <%= category.name %>
+              </span>
+            <% end %>
+          </div>
+        <% end %>
 
         <p class="text-gray-600 mb-3 line-clamp-2"><%= product.description %></p>
 

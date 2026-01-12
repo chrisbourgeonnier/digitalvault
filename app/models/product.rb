@@ -1,6 +1,9 @@
 class Product < ApplicationRecord
   belongs_to :user
 
+  # Many-to-many relationship with categories
+  has_and_belongs_to_many :categories
+
   # ActiveStorage attachment for digital file (what customers download)
   has_one_attached :digital_file
 
@@ -41,6 +44,11 @@ class Product < ApplicationRecord
     else # "newest" or default
       order(created_at: :desc)
     end
+  }
+
+  # Filter by category
+  scope :by_category, ->(category_id) {
+    joins(:categories).where(categories: { id: category_id }) if category_id.present?
   }
 
   private
