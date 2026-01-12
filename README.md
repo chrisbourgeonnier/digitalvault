@@ -94,7 +94,7 @@ cd digitalvault
 bundle install
 
 # Setup database
-rails db:create db:migrate
+rails db:create db:migrate db:seed
 
 # Setup Stripe credentials
 EDITOR="code --wait" rails credentials:edit
