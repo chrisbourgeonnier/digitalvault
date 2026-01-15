@@ -1,176 +1,441 @@
 @import "tailwindcss";
 
+/* ==========================================================================
+   DIGITALVAULT DESIGN SYSTEM
+   Simple, cohesive styling for all pages
+   ========================================================================== */
+
 /* Base element styles */
 @layer base {
+  body {
+    background-color: rgb(249 250 251);
+    color: rgb(17 24 39);
+  }
+
   h1 {
     font-size: 1.875rem;
     font-weight: 700;
-    margin-top: 1.5rem;
+    color: rgb(17 24 39);
     margin-bottom: 1.5rem;
-    word-break: normal;
   }
 
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    max-width: 28rem;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 1.5rem;
-    background-color: white;
-    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
-    border-radius: 0.5rem;
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: rgb(31 41 55);
+    margin-bottom: 1rem;
   }
 
-    .inline-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    max-width: 28rem;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 0.5rem;
-    background-color: rgb(31 41 55);
+  h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: rgb(31 41 55);
+    margin-bottom: 0.75rem;
+  }
+
+  a {
+    color: rgb(37 99 235);
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: rgb(29 78 216);
   }
 
   label {
     display: block;
     font-size: 0.875rem;
-    font-weight: 500;
+    font-weight: 600;
     color: rgb(55 65 81);
-    margin-bottom: 0.25rem;
-  }
-
-  input, textarea {
-    width: 100%;
-    padding: 0.5rem;
-    border: 1px solid rgb(209 213 219);
-    border-radius: 0.375rem;
-    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  }
-
-  input:focus, textarea:focus {
-    outline: 2px solid transparent;
-    outline-offset: 2px;
-    box-shadow: 0 0 0 2px rgb(59 130 246);
+    margin-bottom: 0.5rem;
   }
 }
 
-/* Component styles */
+/* Component styles - Reusable across entire app */
 @layer components {
 
-  .products-index {
-    max-width: 56rem;
-    margin-left: auto;
-    margin-right: auto;
+  /* BUTTONS - Consistent button styling */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.625rem 1.25rem;
+    border-radius: 0.375rem;
+    font-weight: 600;
+    text-align: center;
+    transition: all 0.2s;
+    cursor: pointer;
+    border: none;
+    font-size: 0.875rem;
+  }
+
+  .btn-primary {
+    background-color: rgb(37 99 235);
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background-color: rgb(29 78 216);
+  }
+
+  .btn-secondary {
+    background-color: rgb(107 114 128);
+    color: white;
+  }
+
+  .btn-secondary:hover {
+    background-color: rgb(75 85 99);
+  }
+
+  .btn-danger {
+    background-color: rgb(220 38 38);
+    color: white;
+  }
+
+  .btn-danger:hover {
+    background-color: rgb(185 28 28);
+  }
+
+  .btn-success {
+    background-color: rgb(22 163 74);
+    color: white;
+  }
+
+  .btn-success:hover {
+    background-color: rgb(21 128 61);
+  }
+
+  .btn-sm {
+    padding: 0.375rem 0.875rem;
+    font-size: 0.813rem;
+  }
+
+  .btn-lg {
+    padding: 0.875rem 1.75rem;
+    font-size: 1rem;
+  }
+
+  /* INPUT FIELDS - Consistent form styling */
+  .input {
+    width: 100%;
+    padding: 0.625rem 0.75rem;
+    border: 1px solid rgb(209 213 219);
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    background-color: white;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .input:focus {
+    outline: none;
+    border-color: rgb(59 130 246);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+
+  .input:disabled {
+    background-color: rgb(243 244 246);
+    cursor: not-allowed;
+  }
+
+  /* CARDS - Consistent card containers */
+  .card {
+    background-color: white;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    transition: box-shadow 0.2s;
+  }
+
+  .card:hover {
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  }
+
+  .card-header {
+    border-bottom: 1px solid rgb(229 231 235);
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  /* ALERTS & NOTICES - Consistent messaging */
+  .alert {
+    padding: 1rem 1.25rem;
+    border-radius: 0.375rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.875rem;
+    border-left: 4px solid;
+  }
+
+  .alert-success {
+    background-color: rgb(220 252 231);
+    border-color: rgb(34 197 94);
+    color: rgb(21 128 61);
+  }
+
+  .alert-error {
+    background-color: rgb(254 226 226);
+    border-color: rgb(239 68 68);
+    color: rgb(185 28 28);
+  }
+
+  .alert-warning {
+    background-color: rgb(254 243 199);
+    border-color: rgb(245 158 11);
+    color: rgb(161 98 7);
+  }
+
+  .alert-info {
+    background-color: rgb(224 242 254);
+    border-color: rgb(59 130 246);
+    color: rgb(29 78 216);
+  }
+
+  /* BADGES - Status indicators */
+  .badge {
+    display: inline-block;
+    padding: 0.25rem 0.625rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  .badge-green {
+    background-color: rgb(220 252 231);
+    color: rgb(21 128 61);
+  }
+
+  .badge-yellow {
+    background-color: rgb(254 243 199);
+    color: rgb(161 98 7);
+  }
+
+  .badge-blue {
+    background-color: rgb(219 234 254);
+    color: rgb(29 78 216);
+  }
+
+  .badge-red {
+    background-color: rgb(254 226 226);
+    color: rgb(185 28 28);
+  }
+
+  .badge-gray {
+    background-color: rgb(243 244 246);
+    color: rgb(55 65 81);
+  }
+
+  /* FORMS - Consistent form container styling */
+  .form-container {
+    max-width: 42rem;
+    margin: 0 auto;
+    background-color: white;
     padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+  }
+
+  .form-group {
+    margin-bottom: 1.25rem;
+  }
+
+  .form-actions {
     display: flex;
-    flex-direction: column;
-    gap: 2rem;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgb(229 231 235);
   }
 
-  .products-index h1 {
-    font-size: 1.875rem;
-    font-weight: 700;
-    margin-bottom: 2rem;
-  }
-
-  .products-index table {
+  /* TABLES - Consistent table styling */
+  .table {
     width: 100%;
     background-color: white;
-    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
     border-radius: 0.5rem;
     overflow: hidden;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
   }
 
-  .products-index th {
+  .table thead {
     background-color: rgb(249 250 251);
-    padding: 0.75rem 1.5rem;
+  }
+
+  .table th {
+    padding: 0.875rem 1.25rem;
     text-align: left;
     font-size: 0.75rem;
-    font-weight: 500;
+    font-weight: 600;
     color: rgb(107 114 128);
     text-transform: uppercase;
     letter-spacing: 0.05em;
   }
 
-  .products-index td {
-    padding: 1rem 1.5rem;
-    white-space: nowrap;
+  .table td {
+    padding: 1rem 1.25rem;
+    border-top: 1px solid rgb(243 244 246);
+    font-size: 0.875rem;
+  }
+
+  .table tbody tr:hover {
+    background-color: rgb(249 250 251);
+  }
+
+  /* CONTAINER - Page container */
+  .page-container {
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+
+  /* EMPTY STATES - When no content exists */
+  .empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    background-color: white;
+    border-radius: 0.5rem;
+    border: 2px dashed rgb(229 231 235);
+  }
+
+  .empty-state-icon {
+    width: 4rem;
+    height: 4rem;
+    margin: 0 auto 1.5rem;
+    color: rgb(156 163 175);
+  }
+
+  .empty-state-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: rgb(107 114 128);
+    margin-bottom: 0.5rem;
+  }
+
+  .empty-state-text {
+    color: rgb(156 163 175);
+    margin-bottom: 1.5rem;
+  }
+
+  /* NAVIGATION LINKS - Back/breadcrumb links */
+  .nav-link {
+    display: inline-flex;
+    align-items: center;
+    color: rgb(59 130 246);
     font-size: 0.875rem;
     font-weight: 500;
-    color: rgb(17 24 39);
+    margin-bottom: 1.5rem;
   }
 
-  .products-index .btn-new {
-    display: inline-block;
-    background-color: rgb(79 70 229);
-    color: white;
-    padding: 0.75rem 2rem;
+  .nav-link:hover {
+    color: rgb(37 99 235);
+  }
+
+  /* PRODUCT GRID - Specific to product catalog */
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .product-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .product-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .product-card {
+    background-color: white;
     border-radius: 0.5rem;
-    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    overflow: hidden;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
   }
 
-  .products-index .btn-new:hover {
-    background-color: rgb(67 56 202);
+  .product-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
   }
 
-  .btn-add-cart {
-    background-color: rgb(22 163 74);
-    color: white;
+  .product-image-placeholder {
+    width: 100%;
+    height: 12rem;
+    background-color: rgb(243 244 246);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* FILE INPUT - Styled file upload */
+  input[type="file"] {
+    display: block;
+    width: 100%;
+    font-size: 0.875rem;
+    color: rgb(107 114 128);
+    cursor: pointer;
+  }
+
+  input[type="file"]::file-selector-button {
+    margin-right: 1rem;
     padding: 0.5rem 1rem;
-    border-radius: 0.25rem;
+    border: none;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    background-color: rgb(239 246 255);
+    color: rgb(37 99 235);
+    cursor: pointer;
+    transition: background-color 0.2s;
   }
 
-  .btn-add-cart:hover {
-    background-color: rgb(21 128 61);
+  input[type="file"]::file-selector-button:hover {
+    background-color: rgb(219 234 254);
   }
 
-  .btn {
-    @apply px-4 py-2 rounded font-semibold transition;
+  /* PAGINATION - Consistent pagination styling */
+  .pagination {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-top: 2rem;
   }
 
-  .btn-primary {
-    @apply bg-blue-600 text-white hover:bg-blue-700;
+  .pagination a, .pagination span {
+    padding: 0.5rem 0.875rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: background-color 0.2s;
   }
 
-  .btn-secondary {
-    @apply bg-gray-600 text-white hover:bg-gray-700;
+  .pagination a {
+    background-color: white;
+    color: rgb(55 65 81);
+    border: 1px solid rgb(229 231 235);
   }
 
-  .btn-danger {
-    @apply bg-red-600 text-white hover:bg-red-700;
+  .pagination a:hover {
+    background-color: rgb(249 250 251);
   }
 
-  .card {
-    @apply bg-white rounded-lg shadow-md p-6;
+  .pagination .current {
+    background-color: rgb(37 99 235);
+    color: white;
+    border: 1px solid rgb(37 99 235);
   }
 
-  .input {
-    @apply w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500;
-  }
-
-  /* Pagy pagination styles for Pagy 9.x */
-  nav.pagy {
-    @apply flex justify-center gap-2 mt-8;
-  }
-
-  nav.pagy a,
-  nav.pagy span {
-    @apply px-4 py-2 border border-gray-300 rounded bg-white text-gray-700 hover:bg-gray-100 transition min-w-[40px] text-center;
-  }
-
-  nav.pagy span.current {
-    @apply bg-blue-600 text-white border-blue-600 hover:bg-blue-700;
-  }
-
-  nav.pagy span.gap {
-    @apply border-0 hover:bg-white cursor-default;
-  }
-
-  nav.pagy a[rel="prev"],
-  nav.pagy a[rel="next"] {
-    @apply font-semibold;
+  .pagination .disabled {
+    background-color: rgb(249 250 251);
+    color: rgb(209 213 219);
+    cursor: not-allowed;
   }
 }

@@ -1,44 +1,95 @@
-<div class="cart-container">
-  <h1>Your Cart</h1>
+<div class="page-container">
+  <div class="page-header">
+    <h1>Shopping Cart</h1>
+    <%= link_to "Continue Shopping", products_path, class: "btn btn-secondary" %>
+  </div>
 
   <% if @line_items.any? %>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Product</th>
-          <th>Price</th>
-          <th>Quantity</th>
-          <th>Subtotal</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <% total = 0 %>
-        <% @line_items.each do |item| %>
-          <% subtotal = item[:product].price * item[:quantity] %>
-          <% total += subtotal %>
-          <tr>
-            <td><%= link_to item[:product].title, item[:product] %></td>
-            <td>$<%= item[:product].price %></td>
-            <td><%= item[:quantity] %></td>
-            <td>$<%= '%.2f' % subtotal %></td>
-            <td><%= button_to 'Remove', remove_item_from_cart_path(item[:product].id), method: :delete %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
+    <div class="grid lg:grid-cols-3 gap-8">
+      <!-- Cart Items -->
+      <div class="lg:col-span-2">
+        <div class="card">
+          <div class="space-y-4">
+            <% total = 0 %>
+            <% @line_items.each do |item| %>
+              <% subtotal = item[:product].price * item[:quantity] %>
+              <% total += subtotal %>
 
-    <div class="cart-total">
-      <strong>Total: $<%= '%.2f' % total %></strong>
-    </div>
+              <div class="flex gap-4 pb-4 border-b border-gray-200 last:border-b-0 last:pb-0">
+                <!-- Product Image -->
+                <div class="flex-shrink-0">
+                  <% if item[:product].image.attached? %>
+                    <%= link_to product_path(item[:product]) do %>
+                      <%= image_tag item[:product].image.variant(resize_to_fill: [120, 120]), class: "w-24 h-24 object-cover rounded", alt: item[:product].title %>
+                    <% end %>
+                  <% else %>
+                    <div class="w-24 h-24 bg-gray-200 rounded flex items-center justify-center">
+                      <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                      </svg>
+                    </div>
+                  <% end %>
+                </div>
 
-    <div class="cart-actions">
-      <%= button_to "Proceed to Checkout", checkout_path, method: :post, class: "btn-primary", data: { turbo: false } %>
-      <%= link_to "Clear Cart", clear_cart_path, class: "btn-secondary" %>
-      <%= link_to "Continue Shopping", products_path, class: "text-gray-600" %>
+                <!-- Product Details -->
+                <div class="flex-1">
+                  <h3 class="font-semibold text-lg mb-1">
+                    <%= link_to item[:product].title, product_path(item[:product]), class: "hover:text-blue-600" %>
+                  </h3>
+                  <p class="text-gray-600 text-sm mb-2 line-clamp-2"><%= item[:product].description %></p>
+                  <div class="flex items-center gap-4">
+                    <p class="text-gray-700 font-semibold">$<%= sprintf("%.2f", item[:product].price) %></p>
+                    <span class="text-gray-500 text-sm">×</span>
+                    <p class="text-gray-700 font-semibold"><%= item[:quantity] %></p>
+                  </div>
+                </div>
+
+                <!-- Subtotal and Remove -->
+                <div class="flex flex-col items-end justify-between">
+                  <p class="text-lg font-bold text-gray-900">$<%= sprintf("%.2f", subtotal) %></p>
+                  <%= button_to "Remove", remove_item_from_cart_path(product_id: item[:product].id), method: :delete, class: "btn btn-sm btn-danger", data: { turbo_confirm: "Remove this item from cart?" } %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Order Summary -->
+      <div class="lg:col-span-1">
+        <div class="card sticky top-4">
+          <h2 class="text-xl font-bold mb-4">Order Summary</h2>
+
+          <div class="space-y-3 mb-6 pb-6 border-b border-gray-200">
+            <div class="flex justify-between text-gray-600">
+              <span>Items (<%= pluralize(@line_items.sum { |item| item[:quantity] }, "item") %>)</span>
+              <span>$<%= sprintf("%.2f", total) %></span>
+            </div>
+            <div class="flex justify-between text-gray-600">
+              <span>Shipping</span>
+              <span class="text-green-600 font-semibold">Digital - Free</span>
+            </div>
+          </div>
+
+          <div class="flex justify-between text-xl font-bold mb-6">
+            <span>Total</span>
+            <span class="text-green-600">$<%= sprintf("%.2f", total) %></span>
+          </div>
+
+          <%= button_to "Proceed to Checkout", checkout_path, method: :post, class: "btn btn-success btn-lg w-full mb-3", data: { turbo: false } %>
+          <%= link_to "Clear Cart", clear_cart_path, class: "btn btn-secondary w-full text-center", data: { turbo_confirm: "Clear all items from cart?" } %>
+        </div>
+      </div>
     </div>
   <% else %>
-    <p>Your cart is empty.</p>
-    <%= link_to 'Browse Products', products_path %>
+    <!-- Empty Cart State -->
+    <div class="empty-state">
+      <svg class="empty-state-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+      </svg>
+      <h2 class="empty-state-title">Your cart is empty</h2>
+      <p class="empty-state-text">Add some products to get started!</p>
+      <%= link_to "Browse Products", products_path, class: "btn btn-primary" %>
+    </div>
   <% end %>
 </div>

@@ -1,62 +1,120 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Digitalvault" %></title>
+    <title><%= content_for(:title) || "DigitalVault" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="Digitalvault">
+    <meta name="application-name" content="DigitalVault">
     <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
 
     <%= yield :head %>
 
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
-
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
   <body>
-    <nav class="bg-gray-800 text-white p-4">
-      <div class="container mx-auto flex justify-between items-center">
-        <div class="flex space-x-4">
-          <%= link_to "DigitalVault", products_path, class: "font-bold text-xl" %>
-          <%= link_to "Products", products_path, class: "hover:text-gray-300" %>
-          <% if user_signed_in? %>
-            <%= link_to "My Orders", orders_path, class: "hover:text-gray-300" %>
-          <% end %>
-        </div>
+    <!-- Navigation Bar -->
+    <nav class="bg-gray-800 text-white shadow-lg">
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="flex justify-between items-center h-16">
+          <!-- Left side - Logo and main links -->
+          <div class="flex items-center space-x-8">
+            <%= link_to "DigitalVault", products_path, class: "text-xl font-bold hover:text-gray-300 transition" %>
+            <%= link_to "Products", products_path, class: "text-sm font-medium hover:text-gray-300 transition" %>
+            <% if user_signed_in? %>
+              <%= link_to "My Orders", orders_path, class: "text-sm font-medium hover:text-gray-300 transition" %>
+            <% end %>
+          </div>
 
-        <div class="flex space-x-4 items-center">
-          <%= link_to "Cart (#{cart_item_count})", cart_path, class: "hover:text-gray-300" %>
+          <!-- Right side - Cart and auth links -->
+          <div class="flex items-center space-x-6">
+            <!-- Cart with badge -->
+            <%= link_to cart_path, class: "relative hover:text-gray-300 transition" do %>
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+              </svg>
+              <% if cart_item_count > 0 %>
+                <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                  <%= cart_item_count %>
+                </span>
+              <% end %>
+            <% end %>
 
-          <% if user_signed_in? %>
-            <span class="text-sm"><%= current_user.email %></span>
-            <%= button_to "Sign Out", destroy_user_session_path, method: :delete, form_class:"inline-form", class: "hover:text-gray-300" %>
-          <% else %>
-            <%= link_to "Sign In", new_user_session_path, class: "hover:text-gray-300" %>
-            <%= link_to "Sign Up", new_user_registration_path, class: "hover:text-gray-300" %>
-          <% end %>
+            <!-- Auth links -->
+            <% if user_signed_in? %>
+              <span class="text-sm text-gray-300"><%= current_user.email %></span>
+              <%= button_to "Sign Out", destroy_user_session_path, method: :delete, class: "text-sm font-medium hover:text-gray-300 transition" %>
+            <% else %>
+              <%= link_to "Sign In", new_user_session_path, class: "text-sm font-medium hover:text-gray-300 transition" %>
+              <%= link_to "Sign Up", new_user_registration_path, class: "btn btn-primary btn-sm" %>
+            <% end %>
+          </div>
         </div>
       </div>
     </nav>
 
-
+    <!-- Flash Messages -->
     <% if notice %>
-      <p class="notice bg-green-100 text-green-800 p-4"><%= notice %></p>
-    <% end %>
-    <% if alert %>
-      <p class="alert bg-red-100 text-red-800 p-4"><%= alert %></p>
+      <div class="max-w-7xl mx-auto px-4 mt-4">
+        <div class="alert alert-success">
+          <%= notice %>
+        </div>
+      </div>
     <% end %>
 
-    <main class="container mx-auto mt-8 px-5">
+    <% if alert %>
+      <div class="max-w-7xl mx-auto px-4 mt-4">
+        <div class="alert alert-error">
+          <%= alert %>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- Main Content -->
+    <main class="min-h-screen">
       <%= yield %>
     </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white mt-16">
+      <div class="max-w-7xl mx-auto px-4 py-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div>
+            <h3 class="font-bold text-lg mb-4">DigitalVault</h3>
+            <p class="text-gray-400 text-sm">Secure marketplace for digital downloads.</p>
+          </div>
+          <div>
+            <h4 class="font-semibold mb-4">Quick Links</h4>
+            <ul class="space-y-2 text-sm">
+              <li><%= link_to "Browse Products", products_path, class: "text-gray-400 hover:text-white transition" %></li>
+              <% if user_signed_in? %>
+                <li><%= link_to "My Orders", orders_path, class: "text-gray-400 hover:text-white transition" %></li>
+              <% end %>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-semibold mb-4">Account</h4>
+            <ul class="space-y-2 text-sm">
+              <% if user_signed_in? %>
+                <li><%= link_to "Sign Out", destroy_user_session_path, method: :delete, class: "text-gray-400 hover:text-white transition" %></li>
+              <% else %>
+                <li><%= link_to "Sign In", new_user_session_path, class: "text-gray-400 hover:text-white transition" %></li>
+                <li><%= link_to "Sign Up", new_user_registration_path, class: "text-gray-400 hover:text-white transition" %></li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+        <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400 text-sm">
+          <p>&copy; <%= Time.current.year %> DigitalVault. Built with Ruby on Rails.</p>
+        </div>
+      </div>
+    </footer>
   </body>
 </html>

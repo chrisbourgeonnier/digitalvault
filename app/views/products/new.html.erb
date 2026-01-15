@@ -1,9 +1,17 @@
-<div class="container mx-auto p-6">
-  <h1 class="text-3xl font-bold mb-6">New Product</h1>
+<div class="page-container">
+  <%= link_to products_path, class: "nav-link" do %>
+    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+    </svg>
+    Back to Products
+  <% end %>
 
-  <%= render "form", product: @product %>
+  <div class="max-w-3xl mx-auto">
+    <div class="text-center mb-8">
+      <h1 class="text-3xl font-bold mb-2">Create New Product</h1>
+      <p class="text-gray-600">List a new digital product for sale</p>
+    </div>
 
-  <div class="mt-4">
-    <%= link_to "Back to Products", products_path, class: "text-blue-500 hover:text-blue-700" %>
+    <%= render "form", product: @product %>
   </div>
 </div>
