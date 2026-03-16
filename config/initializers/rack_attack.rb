@@ -1,4 +1,7 @@
 class Rack::Attack
+  # Use memory store for rate limiting to avoid database dependency
+  Rack::Attack.cache.store = ActiveSupport::Cache::MemoryStore.new
+
   # Enable logging
   self.throttled_response_retry_after_header = true
 
