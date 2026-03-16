@@ -21,11 +21,12 @@
 
   <body>
     <!-- Navigation Bar -->
-    <nav class="bg-gray-800 text-white shadow-lg">
+    <nav class="bg-white text-white shadow-lg">
       <div class="max-w-7xl mx-auto px-4">
         <div class="flex justify-between items-center h-16">
           <!-- Left side - Logo and main links -->
           <div class="flex items-center space-x-8">
+            <img src="./digivault.png" alt="" style="height: 40px; width: auto; margin-right: 12px;">
             <%= link_to "DigitalVault", products_path, class: "text-xl font-bold hover:text-gray-300 transition" %>
             <%= link_to "Products", products_path, class: "text-sm font-medium hover:text-gray-300 transition" %>
             <% if user_signed_in? %>
@@ -49,7 +50,7 @@
 
             <!-- Auth links -->
             <% if user_signed_in? %>
-              <span class="text-sm text-gray-300"><%= current_user.email %></span>
+              <span class="text-sm text-gray-400"><%= current_user.email %></span>
               <%= button_to "Sign Out", destroy_user_session_path, method: :delete, class: "text-sm font-medium hover:text-gray-300 transition" %>
             <% else %>
               <%= link_to "Sign In", new_user_session_path, class: "text-sm font-medium hover:text-gray-300 transition" %>
