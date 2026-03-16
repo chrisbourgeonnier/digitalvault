@@ -5,10 +5,5 @@ bundle install
 bundle exec rails assets:precompile
 bundle exec rails assets:clean
 
-# Migrate primary database
-bundle exec rails db:migrate
-
-# Migrate secondary databases (Solid Cache, Solid Queue, Action Cable)
-bundle exec rails db:migrate:cache
-bundle exec rails db:migrate:queue
-bundle exec rails db:migrate:cable
+# Migrate all databases (primary + solid_queue, solid_cache, cable)
+bundle exec rails db:prepare
