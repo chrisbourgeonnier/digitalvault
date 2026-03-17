@@ -16,8 +16,8 @@ cloudflare_r2:
   endpoint: https://fc4555b915a7d4bc62a906eb4c750e51.r2.cloudflarestorage.com
   # R2-specific settings for variant processing
   force_path_style: true
-  signature_version: :v4
   upload:
+    acl: public-read
     server_side_encryption: "AES256"
     cache_control: "max-age=31557600"
 
