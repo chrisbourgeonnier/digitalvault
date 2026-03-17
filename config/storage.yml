@@ -14,10 +14,9 @@ cloudflare_r2:
   region: auto
   bucket: digitalvault-files
   endpoint: https://fc4555b915a7d4bc62a906eb4c750e51.r2.cloudflarestorage.com
-  force_path_style: false
   # R2-specific settings for variant processing
-  s3_force_path_style: true
-  s3_signature_version: :v4
+  force_path_style: true
+  signature_version: :v4
   upload:
     server_side_encryption: "AES256"
     cache_control: "max-age=31557600"
