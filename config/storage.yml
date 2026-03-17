@@ -15,6 +15,8 @@ cloudflare_r2:
   bucket: digitalvault-files
   endpoint: https://fc4555b915a7d4bc62a906eb4c750e51.r2.cloudflarestorage.com
   force_path_style: false
+  upload:
+    acl: public-read
 
 
 # Use bin/rails credentials:edit to set the AWS secrets (as aws:access_key_id|secret_access_key)

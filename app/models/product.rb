@@ -8,7 +8,9 @@ class Product < ApplicationRecord
   has_one_attached :digital_file
 
   # Product preview image (thumbnail for catalog)
-  has_one_attached :image
+  has_one_attached :image do |attachable|
+    attachable.variant :thumb, resize_to_fill: [ 400, 300 ], strip: true, quality: 85
+  end
 
   validates :title, :description, presence: true
   validates :price, presence: true, numericality: { greater_than: 0 }
@@ -50,6 +52,15 @@ class Product < ApplicationRecord
   scope :by_category, ->(category_id) {
     joins(:categories).where(categories: { id: category_id }) if category_id.present?
   }
+
+  # Image helpers for views
+  def image_thumb_url
+    image.variant(:thumb).processed.url if image.attached?
+  end
+
+  def image_original_url
+    image.url if image.attached?
+  end
 
   private
 
