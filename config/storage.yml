@@ -6,6 +6,17 @@ local:
   service: Disk
   root: <%= Rails.root.join("storage") %>
 
+# Cloudflare R2 for production
+cloudflare_r2:
+  service: S3
+  access_key_id: <%= Rails.application.credentials.dig(:cloudflare, :r2_access_key_id) %>
+  secret_access_key: <%= Rails.application.credentials.dig(:cloudflare, :r2_secret_access_key) %>
+  region: auto
+  bucket: digitalvault-files
+  endpoint: https://fc4555b915a7d4bc62a906eb4c750e51.r2.cloudflarestorage.com
+  force_path_style: false
+
+
 # Use bin/rails credentials:edit to set the AWS secrets (as aws:access_key_id|secret_access_key)
 # amazon:
 #   service: S3
