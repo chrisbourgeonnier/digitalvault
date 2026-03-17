@@ -10,7 +10,6 @@
     <%= csp_meta_tag %>
 
     <%= yield :head %>
-
     <link rel="icon" href="/digivault.png" type="image/png">
     <link rel="icon" href="/digivault.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="/digivault.png">
@@ -26,7 +25,7 @@
         <div class="flex justify-between items-center h-16">
           <!-- Left side - Logo and main links -->
           <div class="flex items-center space-x-8">
-            <img src="./digivault.png" alt="" style="height: 40px; width: auto; margin-right: 12px;">
+            <%= image_tag "digivault.png", alt: "DigiVault", style: "height: 40px; width: auto; margin-right: 12px;" %>
             <%= link_to "DigitalVault", products_path, class: "text-xl font-bold hover:text-gray-300 transition" %>
             <%= link_to "Products", products_path, class: "text-sm font-medium hover:text-gray-300 transition" %>
             <% if user_signed_in? %>

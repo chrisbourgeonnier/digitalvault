@@ -25,6 +25,7 @@ A secure, minimalist marketplace for digital downloads (PDFs, templates, etc.) b
 - **Background Jobs**: Solid Queue
 - **Caching**: Solid Cache
 - **Styling**: Tailwind CSS v4 (via tailwindcss-rails)
+- **File Storage**: Cloudflare R2 via ActiveStorage (aws-sdk-s3 1.x)
 - **File Uploads**: ActiveStorage + image_processing 1.14.0
 - **Security Scanning**: Brakeman 7.1.2
 - **Hosting**: Render (free tier)
@@ -45,6 +46,7 @@ A secure, minimalist marketplace for digital downloads (PDFs, templates, etc.) b
 - Seller dashboard: create, edit, delete own products
 - Public catalog: browse all products, view details
 - File upload support: PDF, PNG, JPG, JPEG, ZIP, DOC, DOCX
+- Product preview images stored persistently on Cloudflare R2
 
 ### ✅ Shopping Cart
 - Session-based cart (encrypted, no database storage)
@@ -73,6 +75,14 @@ A secure, minimalist marketplace for digital downloads (PDFs, templates, etc.) b
 - Re-download capability for purchased files
 - Order status display (pending/paid/failed/cancelled)
 
+### ✅ Persistent File Storage (Cloudflare R2)
+- All uploaded files stored on Cloudflare R2 (S3-compatible)
+- Files persist across deploys and server restarts
+- Signed URLs for secure, time-limited file access
+- Server-side AES256 encryption at rest
+- Long-term browser caching for images (1 year)
+- Credentials stored via Rails encrypted credentials + Render env vars
+
 ### ✅ Security Hardening
 - **Brakeman**: Zero security vulnerabilities detected
 - **Rack Attack**: Rate limiting on login attempts (5 per 20s) and password resets (3 per 5min)
@@ -84,9 +94,9 @@ A secure, minimalist marketplace for digital downloads (PDFs, templates, etc.) b
 ### ✅ Deployment (Render)
 - Deployed to Render free tier
 - PostgreSQL hosted on Render
-- Solid Queue/Cache/Cable schemas loaded on deploy
+- Solid Queue / Cache / Cable migrated safely on each deploy
 - Stripe production webhooks configured
-- All secrets via Rails encrypted credentials
+- All secrets via Rails encrypted credentials + environment variables
 
 ## Setup Instructions
 
@@ -94,6 +104,7 @@ A secure, minimalist marketplace for digital downloads (PDFs, templates, etc.) b
 - Ruby 3.3.5 (via rbenv)
 - PostgreSQL installed and running
 - Stripe account (test mode)
+- Cloudflare R2 bucket + API credentials
 - macOS or Ubuntu/WSL2
 
 ### Installation
@@ -120,6 +131,10 @@ stripe:
   publishable_key: pk_test_YOUR_KEY
   secret_key: sk_test_YOUR_KEY
   webhook_secret: whsec_YOUR_WEBHOOK_SECRET
+
+cloudflare:
+  r2_access_key_id: YOUR_R2_ACCESS_KEY
+  r2_secret_access_key: YOUR_R2_SECRET_KEY
 
 smtp:
   user_name: YOUR_SMTP_USER
@@ -157,14 +172,19 @@ stripe listen --forward-to localhost:3000/webhooks/stripe
 | `RAILS_MASTER_KEY` | Contents of `config/master.key` (use `cat config/master.key \| tr -d '\n'`) |
 | `RAILS_ENV` | `production` |
 | `WEB_CONCURRENCY` | `2` |
+| `RAILS_MAX_THREADS` | `3` |
+| `CLOUDFLARE_R2_ACCESS_KEY_ID` | R2 API access key (fallback if credentials unavailable) |
+| `CLOUDFLARE_R2_SECRET_ACCESS_KEY` | R2 API secret key (fallback if credentials unavailable) |
 
 ### Build Script
 
 `bin/render-build.sh` handles all deploy steps automatically:
 - Bundle install
 - Asset precompilation
-- Primary database migrations
-- Solid Queue / Cache / Cable schema loading
+- Primary database migrations (`db:migrate`)
+- Solid Queue / Cache / Cable **migrations** — uses `db:migrate` not `db:schema:load` to avoid wiping data
+
+> ⚠️ Never use `db:schema:load` for Solid Queue/Cache/Cable on Render — it destroys all background job and cache data on every deploy.
 
 ### Stripe Webhook (Production)
 
@@ -174,10 +194,28 @@ https://digitalvault-mzj6.onrender.com/webhooks/stripe
 ```
 Listen for: `checkout.session.completed`
 
+### Cloudflare R2 Configuration
+
+R2 bucket: `digitalvault-files`
+
+`config/storage.yml` R2 settings:
+```yaml
+cloudflare_r2:
+  service: S3
+  region: auto
+  force_path_style: true
+  request_checksum_calculation: "when_required"
+  response_checksum_validation: "when_required"
+  upload:
+    acl: public-read
+    server_side_encryption: "AES256"
+    cache_control: "max-age=31557600, public"
+```
+
 ### ⚠️ Known Limitations (Free Tier)
-- **Ephemeral file storage**: uploaded files are lost on redeploy (S3/R2 integration planned)
-- **PostgreSQL expires after 30 days**: recreate or upgrade the Render database before expiry
-- **Cold starts**: free tier spins down after inactivity, first request may be slow
+- **Cold starts**: free tier spins down after inactivity — first request may take 30–60s. Use [UptimeRobot](https://uptimerobot.com) to ping `/up` every 5 minutes to keep the app warm.
+- **PostgreSQL expires after 30 days**: recreate or upgrade the Render database before expiry.
+- **Image variants**: server-side thumbnail processing (ImageMagick) is incompatible with R2 tempfiles on Render free tier. Images are served at original size and resized via CSS `object-fit`.
 
 ## Project Structure
 
@@ -192,7 +230,7 @@ app/
 │   └── webhooks_controller.rb     # Stripe webhook handling
 ├── models/
 │   ├── user.rb                    # Devise auth, has_many :products, :orders
-│   ├── product.rb                 # belongs_to :user, has_one_attached :digital_file
+│   ├── product.rb                 # belongs_to :user, has_one_attached :digital_file + :image
 │   └── order.rb                   # belongs_to :user, stores cart_data JSON
 ├── policies/
 │   ├── product_policy.rb          # Authorization: only owners can edit
@@ -204,6 +242,7 @@ app/
 │   ├── checkout/                  # Success and cancel pages
 │   └── orders/                    # Order history and details
 └── config/
+    ├── storage.yml                # Cloudflare R2 configuration
     ├── database.yml               # Multi-database config (primary/queue/cache/cable)
     └── initializers/
         ├── stripe.rb              # Stripe API configuration
@@ -222,6 +261,7 @@ app/
 ✅ **CSRF Protection** — Rails token verification
 ✅ **Encrypted Credentials** — Master key for all secrets
 ✅ **Webhook Signature Verification** — Stripe signature validation
+✅ **R2 Encryption at Rest** — AES256 server-side encryption
 
 ## Configuration Reference
 
@@ -267,14 +307,15 @@ app/
 - Stripe production webhooks
 - Encrypted credentials
 
-### 🚧 Phase 3: UX Polish (Planned)
+### ✅ Phase 3: Storage (Complete)
 - Persistent file storage (Cloudflare R2)
-- Product thumbnails/previews
-- Search & pagination
+- Safe deploy pipeline
+
+### 🚧 Phase 4: UX Polish (Planned)
 - Email receipts
 - Product categories
 
-### 🔮 Phase 4: Full Marketplace
+### 🔮 Phase 5: Full Marketplace
 - Seller shops & profiles
 - Stripe Connect for seller payouts
 - Reviews and ratings
@@ -294,8 +335,19 @@ app/
 
 ### File Upload Issues
 - Verify ActiveStorage: `rails active_storage:install`
-- Check `digital_file` is in strong parameters
+- Check `digital_file` and `image` are in strong parameters
 - Test attachment: `product.digital_file.attached?`
+- Verify R2 env vars are set on Render dashboard
+
+### Puma Crashing on Render
+- Never use `db:schema:load` for queue/cache/cable — use `db:migrate` instead
+- Ensure `WEB_CONCURRENCY` and `RAILS_MAX_THREADS` are set in Render env vars
+- Check all Solid Queue/Cache tables exist after deploy
+
+### Cold Start / Port Timeout on Render
+- Free tier spins down after 15 min inactivity
+- Set up UptimeRobot to ping `https://digitalvault-mzj6.onrender.com/up` every 5 minutes
+- First request after spin-down takes 30–60 seconds — this is normal
 
 ## Credits
 
