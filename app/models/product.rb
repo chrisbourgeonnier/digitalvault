@@ -62,6 +62,8 @@ class Product < ApplicationRecord
     image.url if image.attached?
   end
 
+  after_create_commit :generate_image_variant, if: :image_attached?
+
   private
 
   def acceptable_digital_file_type
@@ -88,5 +90,13 @@ class Product < ApplicationRecord
     if image.byte_size > 5.megabytes
       errors.add(:image, "must be less than 5MB")
     end
+  end
+
+  def generate_image_variant
+    GenerateProductVariantJob.perform_later(self.id) if image.attached?
+  end
+
+  def image_attached?
+    image.attached?
   end
 end
