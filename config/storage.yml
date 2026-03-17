@@ -9,8 +9,8 @@ local:
 # Cloudflare R2 for production
 cloudflare_r2:
   service: S3
-  access_key_id: <%= Rails.application.credentials.dig(:cloudflare, :r2_access_key_id) %>
-  secret_access_key: <%= Rails.application.credentials.dig(:cloudflare, :r2_secret_access_key) %>
+  access_key_id: <%= Rails.application.credentials.dig(:cloudflare, :r2_access_key_id).presence || ENV["CLOUDFLARE_R2_ACCESS_KEY_ID"] %>
+  secret_access_key: <%= Rails.application.credentials.dig(:cloudflare, :r2_secret_access_key).presence || ENV["CLOUDFLARE_R2_SECRET_ACCESS_KEY"] %>
   region: auto
   bucket: digitalvault-files
   endpoint: https://fc4555b915a7d4bc62a906eb4c750e51.r2.cloudflarestorage.com
