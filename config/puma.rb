@@ -30,7 +30,7 @@ threads threads_count, threads_count
 
 # Add this block for production cluster mode
 if ENV["RAILS_ENV"] == "production"
-  workers ENV.fetch("WEB_CONCURRENCY", 2)
+  workers ENV.fetch("WEB_CONCURRENCY", 1)
   preload_app!
 end
 
