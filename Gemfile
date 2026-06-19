@@ -49,7 +49,7 @@ gem "stripe"                      # Payment processing for checkouts
 gem "hotwire-rails"               # Enables Turbo/Stimulus (already partially there via turbo/stimulus-rails)
 gem "tailwindcss-rails", "~> 4.4" # Tailwind CSS framework integration
 gem "rack-attack"                 # Throttle and block abusive requests
-gem "pagy", "~> 9.0"              # Fast, lightweight pagination
+gem "pagy", "~> 43.3"             # Fast, lightweight pagination
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
